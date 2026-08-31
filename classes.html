@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Classes &amp; Notes — Reza</title>
+<meta name="description" content="Courses taken, organised by term, with links to typed lecture notes.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="assets/js/site.js"></script>
+<script defer id="MathJax-script" src="assets/vendor/mathjax/tex-chtml.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Reza</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html">About</a>
+      <a href="classes.html" aria-current="page">Classes</a>
+      <a href="research.html">Research</a>
+      <a href="blog.html">Blog</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <h1 class="page-title">Classes &amp; Notes</h1>
+    <p class="lede">
+      Courses I&rsquo;ve taken, newest term first, along with whatever notes I typed up
+      while taking them. Notes are plain HTML pages &mdash; LaTeX in them is typeset
+      automatically.
+    </p>
+
+    <!-- ==================================================================
+         EDIT ME: one <section> per term, one <div class="entry"> per class.
+         Drop the <ul class="note-links"> block if a class has no notes.
+         ================================================================== -->
+
+    <h2>Fall 2026 &mdash; in progress</h2>
+
+    <div class="entry">
+      <h3>PHYS 512 &middot; Quantum Field Theory I</h3>
+      <p class="meta">
+        <span class="tag tag--active">In progress</span>
+        <span>Instructor: [name]</span>
+        <span>4 credits</span>
+      </p>
+      <p>
+        Canonical quantization of free fields, the Feynman propagator, and perturbation
+        theory up to one loop. The organising object is the generating functional
+        $Z[J] = \int \mathcal{D}\phi \; e^{i S[\phi] + i\int J\phi}$, from which every
+        correlation function falls out by differentiation.
+      </p>
+      <ul class="note-links">
+        <li><a href="notes/example-course-notes.html">Lecture notes</a></li>
+        <li><a href="#">Problem set solutions</a></li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <h3>MATH 405 &middot; Real Analysis</h3>
+      <p class="meta">
+        <span class="tag tag--active">In progress</span>
+        <span>Instructor: [name]</span>
+        <span>3 credits</span>
+      </p>
+      <p>
+        Measure theory, the Lebesgue integral, and $L^p$ spaces. The result everything
+        else leans on: if $f_n \to f$ pointwise and $\abs{f_n} \le g$ with $g$ integrable,
+        then $\lim_n \int f_n = \int f$ &mdash; dominated convergence.
+      </p>
+      <ul class="note-links">
+        <li><a href="#">Lecture notes</a></li>
+      </ul>
+    </div>
+
+    <h2>Spring 2026</h2>
+
+    <div class="entry">
+      <h3>PHYS 431 &middot; Statistical Mechanics</h3>
+      <p class="meta">
+        <span class="tag">Completed</span>
+        <span>Instructor: [name]</span>
+        <span>4 credits</span>
+      </p>
+      <p>
+        Ensembles, partition functions, and phase transitions. Everything follows from
+        $Z = \sum_i e^{-\beta E_i}$ and the free energy $F = -k_B T \ln Z$.
+      </p>
+      <ul class="note-links">
+        <li><a href="#">Lecture notes</a></li>
+        <li><a href="#">Ising model simulation</a></li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <h3>CS 361 &middot; Numerical Methods</h3>
+      <p class="meta">
+        <span class="tag">Completed</span>
+        <span>Instructor: [name]</span>
+        <span>3 credits</span>
+      </p>
+      <p>
+        Floating-point arithmetic, conditioning, linear solvers, and ODE integrators.
+        Most of the course was really about one question: when does
+        $\kappa(A) = \norm{A}\,\norm{A^{-1}}$ make your answer meaningless?
+      </p>
+      <ul class="note-links">
+        <li><a href="#">Lecture notes</a></li>
+      </ul>
+    </div>
+
+    <h2>Fall 2025</h2>
+
+    <div class="entry">
+      <h3>MATH 320 &middot; Linear Algebra</h3>
+      <p class="meta">
+        <span class="tag">Completed</span>
+        <span>Instructor: [name]</span>
+        <span>3 credits</span>
+      </p>
+      <p>
+        Vector spaces, spectral theory, and the singular value decomposition
+        $A = U\Sigma V^{\mathsf{T}}$.
+      </p>
+    </div>
+
+    <div class="entry">
+      <h3>PHYS 301 &middot; Classical Mechanics</h3>
+      <p class="meta">
+        <span class="tag">Completed</span>
+        <span>Instructor: [name]</span>
+        <span>4 credits</span>
+      </p>
+      <p>
+        Lagrangian and Hamiltonian formulations, with the Euler&ndash;Lagrange equation
+        $\frac{\diff{}}{\diff{t}}\frac{\partial L}{\partial \dot q} - \frac{\partial L}{\partial q} = 0$
+        doing most of the work.
+      </p>
+    </div>
+
+    <hr>
+
+    <h2>At a glance</h2>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th scope="col">Term</th><th scope="col">Course</th><th scope="col">Topic</th><th scope="col">Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Fall 2026</td><td>PHYS 512</td><td>Quantum field theory</td><td><a href="notes/example-course-notes.html">Yes</a></td></tr>
+          <tr><td>Fall 2026</td><td>MATH 405</td><td>Real analysis</td><td>&mdash;</td></tr>
+          <tr><td>Spring 2026</td><td>PHYS 431</td><td>Statistical mechanics</td><td>&mdash;</td></tr>
+          <tr><td>Spring 2026</td><td>CS 361</td><td>Numerical methods</td><td>&mdash;</td></tr>
+          <tr><td>Fall 2025</td><td>MATH 320</td><td>Linear algebra</td><td>&mdash;</td></tr>
+          <tr><td>Fall 2025</td><td>PHYS 301</td><td>Classical mechanics</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>&copy; <span data-year>2026</span> Reza</span>
+    <span><a href="https://github.com/rezakaze">GitHub</a> &middot; <a href="mailto:mhmdrzkzm04@gmail.com">Email</a></span>
+  </div>
+</footer>
+</body>
+</html>

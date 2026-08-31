@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHYS 512 — Lecture notes — Reza</title>
+<meta name="description" content="Lecture notes for a quantum field theory course.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/style.css">
+<script src="../assets/js/site.js"></script>
+<script defer id="MathJax-script" src="../assets/vendor/mathjax/tex-chtml.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Reza</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="../index.html">About</a>
+      <a href="../classes.html" aria-current="page">Classes</a>
+      <a href="../research.html">Research</a>
+      <a href="../blog.html">Blog</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <a class="back" href="../classes.html">&larr; All classes</a>
+
+    <h1 class="page-title">PHYS 512 &middot; Lecture notes</h1>
+    <p class="lede">
+      Quantum Field Theory I &mdash; Fall 2026. Typed up as the course goes; expect gaps and
+      the occasional sign error.
+    </p>
+
+    <h2>1. The free scalar field</h2>
+    <p>
+      Start from the Klein&ndash;Gordon Lagrangian density for a real scalar field of mass $m$:
+    </p>
+    <div class="math-block">
+      \[
+        \mathcal{L} = \tfrac{1}{2}\,\partial_\mu \phi \,\partial^\mu \phi
+                    - \tfrac{1}{2}\,m^2 \phi^2 .
+      \]
+    </div>
+    <p>
+      The Euler&ndash;Lagrange equation gives $(\Box + m^2)\phi = 0$, whose plane-wave solutions
+      satisfy the on-shell condition $p^2 = m^2$, i.e. $p^0 = \omega_{\mathbf{p}} =
+      \sqrt{\abs{\mathbf{p}}^2 + m^2}$.
+    </p>
+
+    <h2>2. Canonical quantization</h2>
+    <p>
+      Promote the field and its conjugate momentum $\pi = \dot\phi$ to operators obeying
+      equal-time commutation relations,
+    </p>
+    <div class="math-block">
+      \[
+        \bigl[\phi(\mathbf{x}, t),\, \pi(\mathbf{y}, t)\bigr]
+          = i\,\delta^{(3)}(\mathbf{x} - \mathbf{y}),
+        \qquad
+        \bigl[\phi(\mathbf{x}, t),\, \phi(\mathbf{y}, t)\bigr] = 0,
+      \]
+    </div>
+    <p>and expand in creation and annihilation operators:</p>
+    <div class="math-block">
+      \[
+        \phi(x) = \int \frac{\diff{^3 p}}{(2\pi)^3}
+          \frac{1}{\sqrt{2\omega_{\mathbf{p}}}}
+          \left( a_{\mathbf{p}}\, e^{-i p \cdot x}
+               + a^{\dagger}_{\mathbf{p}}\, e^{+i p \cdot x} \right),
+        \qquad
+        \bigl[a_{\mathbf{p}},\, a^{\dagger}_{\mathbf{q}}\bigr]
+          = (2\pi)^3\, \delta^{(3)}(\mathbf{p} - \mathbf{q}).
+      \]
+    </div>
+
+    <div class="callout">
+      <p class="callout-title">Careful</p>
+      <p>The Hamiltonian comes out as</p>
+      <div class="math-block">
+        \[
+          H = \int \frac{\diff{^3p}}{(2\pi)^3}\, \omega_{\mathbf{p}}
+              \left( a^{\dagger}_{\mathbf{p}} a_{\mathbf{p}}
+                    + \tfrac{1}{2}(2\pi)^3 \delta^{(3)}(0) \right).
+        \]
+      </div>
+      <p>
+        The second term is the divergent zero-point energy; normal ordering discards it,
+        which is legitimate here only because nothing in this theory couples to an
+        absolute energy.
+      </p>
+    </div>
+
+    <h2>3. The Feynman propagator</h2>
+    <p>
+      The time-ordered two-point function is the object every perturbative calculation is
+      built from:
+    </p>
+    <div class="math-block">
+      \begin{align}
+        D_F(x - y) &= \inner{0 | T\,\phi(x)\phi(y) | 0} \\
+                   &= \int \frac{\diff{^4 p}}{(2\pi)^4}
+                      \frac{i\, e^{-i p\cdot(x-y)}}{p^2 - m^2 + i\epsilon}.
+      \end{align}
+    </div>
+    <p>
+      The $i\epsilon$ is not decoration: it fixes which way the contour dodges the poles at
+      $p^0 = \pm\omega_{\mathbf{p}}$, and so encodes the boundary condition that positive
+      frequencies propagate forward in time and negative frequencies backward.
+    </p>
+
+    <h2>4. To do</h2>
+    <ul>
+      <li>Wick&rsquo;s theorem and the combinatorics of contractions.</li>
+      <li>$\phi^4$ interactions: the vertex factor $-i\lambda$ and the first loop.</li>
+      <li>Regularization &mdash; why $\int \diff{^4 k}\, (k^2 - m^2)^{-2}$ diverges logarithmically.</li>
+    </ul>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>&copy; <span data-year>2026</span> Reza</span>
+    <span><a href="https://github.com/rezakaze">GitHub</a> &middot; <a href="mailto:mhmdrzkzm04@gmail.com">Email</a></span>
+  </div>
+</footer>
+</body>
+</html>
