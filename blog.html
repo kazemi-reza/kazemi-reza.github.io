@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blog — Reza</title>
+<meta name="description" content="Write-ups, derivations, and notes to self.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="assets/js/site.js"></script>
+<script defer id="MathJax-script" src="assets/vendor/mathjax/tex-chtml.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Reza</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html">About</a>
+      <a href="classes.html">Classes</a>
+      <a href="research.html">Research</a>
+      <a href="blog.html" aria-current="page">Blog</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <h1 class="page-title">Blog</h1>
+    <p class="lede">
+      Longer write-ups and derivations. Each post is its own page in
+      <code>blog/</code>; LaTeX in them is typeset the same way it is everywhere else here.
+    </p>
+
+    <!-- ==================================================================
+         EDIT ME: newest post first. To add one, copy blog/_template.html
+         to blog/YYYY-MM-DD-slug.html and add an <article> entry below.
+         ================================================================== -->
+
+    <article class="entry">
+      <h3><a href="blog/2026-08-31-writing-math-here.html">Writing math on this site</a></h3>
+      <p class="meta"><time datetime="2026-08-31">31 August 2026</time><span>&middot;</span><span>4 min</span></p>
+      <p>
+        Everything you can type in a LaTeX document you can type into these pages: inline
+        math like $e^{i\pi} + 1 = 0$, display equations, aligned derivations, and numbered
+        environments. Here is exactly how it works and where the edges are.
+      </p>
+    </article>
+
+    <article class="entry">
+      <h3><a href="#">Why the Gaussian integral keeps showing up</a></h3>
+      <p class="meta"><time datetime="2026-08-14">14 August 2026</time><span>&middot;</span><span>6 min</span></p>
+      <p>
+        $\int_{-\infty}^{\infty} e^{-x^2}\,\diff{x} = \sqrt{\pi}$ is the one integral worth
+        memorising, and the polar-coordinate trick that evaluates it is the seed of the
+        saddle-point method, the partition function of a free field, and half of statistics.
+      </p>
+    </article>
+
+    <article class="entry">
+      <h3><a href="#">Floating point will betray you eventually</a></h3>
+      <p class="meta"><time datetime="2026-07-02">2 July 2026</time><span>&middot;</span><span>8 min</span></p>
+      <p>
+        A short catalogue of the ways $\mathrm{fl}(a + b) \ne a + b$ has cost me an afternoon:
+        catastrophic cancellation, summation order, and why
+        <code>0.1 + 0.2 != 0.3</code> is the least interesting example.
+      </p>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>&copy; <span data-year>2026</span> Reza</span>
+    <span><a href="https://github.com/rezakaze">GitHub</a> &middot; <a href="mailto:mhmdrzkzm04@gmail.com">Email</a></span>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Writing math on this site — Reza</title>
+<meta name="description" content="How LaTeX is typeset on this site, with examples of inline, display, and aligned math.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/style.css">
+<script src="../assets/js/site.js"></script>
+<script defer id="MathJax-script" src="../assets/vendor/mathjax/tex-chtml.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Reza</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="../index.html">About</a>
+      <a href="../classes.html">Classes</a>
+      <a href="../research.html">Research</a>
+      <a href="../blog.html" aria-current="page">Blog</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <a class="back" href="../blog.html">&larr; All posts</a>
+
+    <h1 class="page-title">Writing math on this site</h1>
+    <p class="meta"><time datetime="2026-08-31">31 August 2026</time><span>&middot;</span><span>4 min</span></p>
+
+    <p>
+      Every page here loads MathJax, so LaTeX typed straight into the HTML gets typeset in
+      the browser. There is no build step and nothing to install &mdash; you edit a file,
+      commit it, and the math renders.
+    </p>
+
+    <h2>Inline math</h2>
+    <p>
+      Wrap it in single dollar signs or <code>\(&hellip;\)</code>. So typing
+      <code>$e^{i\pi} + 1 = 0$</code> gives $e^{i\pi} + 1 = 0$, and
+      <code>\(\zeta(2) = \pi^2/6\)</code> gives \(\zeta(2) = \pi^2/6\) &mdash; both sit on the
+      text baseline without disturbing the line height.
+    </p>
+
+    <h2>Display math</h2>
+    <p>
+      Double dollars or <code>\[&hellip;\]</code> break the equation onto its own line. The
+      Fourier transform, for instance:
+    </p>
+    <div class="math-block">
+      \[
+        \hat f(\xi) = \int_{-\infty}^{\infty} f(x)\, e^{-2\pi i x \xi} \,\diff{x}.
+      \]
+    </div>
+
+    <h2>Multi-line derivations</h2>
+    <p>
+      LaTeX environments work as written. An <code>align</code> block, aligned on the equals
+      signs, evaluating the Gaussian integral the usual way:
+    </p>
+    <div class="math-block">
+      \begin{align}
+        I^2 &= \left(\int_{-\infty}^{\infty} e^{-x^2}\,\diff{x}\right)
+               \left(\int_{-\infty}^{\infty} e^{-y^2}\,\diff{y}\right) \\
+            &= \int_0^{2\pi}\!\!\int_0^{\infty} e^{-r^2}\, r \,\diff{r}\,\diff{\theta} \\
+            &= 2\pi \cdot \tfrac{1}{2} \;=\; \pi,
+      \end{align}
+    </div>
+    <p>so $I = \sqrt{\pi}$. Equations in an <code>align</code> are numbered automatically;
+      use <code>align*</code> if you would rather they weren&rsquo;t.</p>
+
+    <h2>Matrices, cases, and the rest</h2>
+    <div class="math-block">
+      \[
+        A = \begin{pmatrix} a & b \\ c & d \end{pmatrix},
+        \qquad
+        A^{-1} = \frac{1}{ad - bc} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix}.
+      \]
+    </div>
+    <p>Piecewise definitions with <code>cases</code>:</p>
+    <div class="math-block">
+      \[
+        \operatorname{sgn}(x) = \begin{cases}
+          +1 & x > 0, \\
+          \phantom{+}0 & x = 0, \\
+          -1 & x < 0.
+        \end{cases}
+      \]
+    </div>
+
+    <h2>Shorthands</h2>
+    <p>
+      A few macros are predefined in <code>assets/js/site.js</code>, so common things stay
+      short. <code>\RR</code>, <code>\NN</code>, <code>\ZZ</code>, <code>\CC</code>,
+      <code>\QQ</code> and <code>\EE</code> give the blackboard letters &mdash;
+      $\RR$, $\NN$, $\ZZ$, $\CC$, $\QQ$, $\EE$ &mdash; while <code>\diff{x}</code>,
+      <code>\abs{x}</code>, <code>\norm{x}</code>, <code>\set{x}</code> and
+      <code>\inner{x}</code> give $\diff{x}$, $\abs{x}$, $\norm{x}$, $\set{x}$ and
+      $\inner{x}$ with auto-sized delimiters. Add your own to the <code>macros</code> block
+      in that file and they work on every page at once.
+    </p>
+
+    <h2>Showing LaTeX source</h2>
+    <p>
+      Anything inside <code>&lt;code&gt;</code> or <code>&lt;pre&gt;</code> is left alone, so
+      you can print source without it being typeset:
+    </p>
+<pre><code>&lt;div class="math-block"&gt;
+  \[
+    \norm{u}_{L^2}^2 = \int_\Omega \abs{u(x)}^2 \,\diff{x}
+  \]
+&lt;/div&gt;
+</code></pre>
+
+    <div class="callout">
+      <p class="callout-title">One thing to watch</p>
+      <p>
+        Because a bare <code>$</code> opens inline math, write a literal dollar sign as
+        <code>\$</code> &mdash; otherwise a sentence with two prices in it turns into an
+        equation.
+      </p>
+    </div>
+
+    <h2>Adding a post</h2>
+    <p>
+      Copy <code>blog/_template.html</code> to <code>blog/YYYY-MM-DD-slug.html</code>, write
+      the body, then add a matching <code>&lt;article class="entry"&gt;</code> block at the
+      top of <code>blog.html</code> so it shows up in the list. That&rsquo;s the whole
+      workflow.
+    </p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>&copy; <span data-year>2026</span> Reza</span>
+    <span><a href="https://github.com/rezakaze">GitHub</a> &middot; <a href="mailto:mhmdrzkzm04@gmail.com">Email</a></span>
+  </div>
+</footer>
+</body>
+</html>
