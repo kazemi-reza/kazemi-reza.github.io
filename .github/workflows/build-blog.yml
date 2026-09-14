@@ -1,0 +1,69 @@
+# Rebuilds the blog pages whenever a post changes, so editing a Markdown file
+# on github.com is enough to publish it — no local build, nothing to remember.
+#
+# It commits the generated HTML back to the branch and then asks GitHub Pages
+# for a fresh deploy. If a post is malformed the run fails loudly and the site
+# is left exactly as it was.
+
+name: Build blog
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'blog/posts/**'
+      - 'blog.html'
+      - 'tools/**'
+      - '.github/workflows/build-blog.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: build-blog
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check the Markdown converter
+        run: python3 tools/test_build.py
+
+      - name: Build post pages
+        run: python3 tools/build.py
+
+      - name: Commit generated pages
+        id: commit
+        run: |
+          if [ -z "$(git status --porcelain blog blog.html)" ]; then
+            echo "nothing to rebuild"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add blog blog.html
+          git commit -m "Rebuild blog pages
+
+          Generated from blog/posts/ by tools/build.py."
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Ask GitHub Pages to redeploy
+        # A push made with GITHUB_TOKEN does not always kick off the Pages
+        # build on its own, so request one explicitly. Harmless no-op if the
+        # site is published through Actions instead of from a branch.
+        if: steps.commit.outputs.changed == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api --method POST "repos/${{ github.repository }}/pages/builds"
