@@ -2,7 +2,6 @@
 title: Why the Gaussian integral keeps showing up
 date: 2026-08-14
 summary: $\int_{-\infty}^{\infty} e^{-x^2}\,\diff{x} = \sqrt{\pi}$ is the one integral worth memorising, and the trick that evaluates it is the seed of half of statistics.
-draft: true
 ---
 
 The polar-coordinate trick that evaluates it is the seed of the saddle-point
