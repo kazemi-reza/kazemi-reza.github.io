@@ -56,6 +56,10 @@ html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
 body {
   margin: 0;
+  /* Keeps the footer at the bottom of the window on a short page. */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: var(--bg);
   color: var(--text);
   font-family: var(--sans);
@@ -161,7 +165,10 @@ a:hover { color: var(--teal); border-bottom-color: var(--amber); }
 
 /* ------------------------------------------------------------------ page  */
 
-main { padding-block: clamp(2.5rem, 7vw, 4.5rem) 4rem; }
+main {
+  flex: 1 0 auto;
+  padding-block: clamp(2.5rem, 7vw, 4.5rem) 4rem;
+}
 
 .page-title {
   font-size: clamp(1.9rem, 5vw, 2.6rem);

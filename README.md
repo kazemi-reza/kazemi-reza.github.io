@@ -1,10 +1,53 @@
 # rezakaze.github.io
 
-A hand-written static site — plain HTML and CSS, no Jekyll, no build step, no
-dependencies to install. Edit a file, commit, push; GitHub Pages serves it as-is.
+A static site with no Jekyll and nothing to install. Blog posts are written in
+Markdown and turned into plain HTML by a small script here in the repo; the rest
+of the pages are hand-written HTML. GitHub Pages only ever serves finished HTML,
+so there is no build on their side that can fail.
 
 The `.nojekyll` file at the repo root is what tells GitHub Pages to skip Jekyll
 processing entirely. Don't delete it.
+
+## Writing a blog post
+
+```sh
+cp blog/posts/_template.md blog/posts/2026-09-20-my-post.md
+python3 tools/build.py --serve
+```
+
+Write Markdown (with LaTeX in it) in that file. The page rebuilds every time you
+save, at <http://127.0.0.1:8000/blog.html>. When you're happy, stop the server,
+run `python3 tools/build.py` once, and commit both the `.md` and the generated
+`.html`.
+
+Each post starts with a front matter block:
+
+```yaml
+---
+title: Why the Gaussian integral keeps showing up
+date: 2026-09-20
+summary: One sentence; it becomes the blurb in the post list.
+draft: true
+---
+```
+
+`title` is required. `date` is too, unless the filename starts with one.
+`draft: true` keeps a post out of the site until you remove the line — and if
+you draft or delete a post that was published, its page is cleaned up on the
+next build. Reading time is counted automatically.
+
+Markdown gets the usual: headings, lists, tables, footnotes, fenced code,
+links, `**bold**`, `*italic*`. One extra: a blockquote whose first line is bold
+becomes a callout box.
+
+```md
+> **One thing to watch**
+> Because a bare `$` opens inline math, write a literal dollar sign as `\$`.
+```
+
+The build refuses to write anything if a post is malformed, and says which file
+and what's wrong. `python3 tools/test_build.py` checks the conversion itself —
+worth running if you ever change `tools/build.py`.
 
 ## Pages
 
@@ -18,7 +61,9 @@ processing entirely. Don't delete it.
 
 Longer content lives one directory down:
 
-- `blog/` — one HTML file per post, plus `_template.html` to copy
+- `blog/posts/` — **one Markdown file per post — this is where you write**, plus
+  `_template.md` to copy
+- `blog/*.html` — generated from those Markdown files; don't edit by hand
 - `notes/` — one HTML file per set of course notes, plus `_template.html`
 
 Shared assets:
@@ -26,6 +71,10 @@ Shared assets:
 - `assets/css/style.css` — the whole stylesheet
 - `assets/js/site.js` — MathJax configuration, LaTeX macros, footer year
 - `assets/favicon.svg`
+- `tools/build.py` — turns `blog/posts/*.md` into post pages and rebuilds the
+  post list in `blog.html`
+- `tools/vendor/markdown2.py` — the Markdown converter, vendored (MIT, license
+  included) so the build needs no `pip install`
 - `assets/vendor/mathjax/` — MathJax 3.2.2, self-hosted (Apache-2.0, license
   included). Nothing is loaded from a CDN, so the site has no external runtime
   dependency and renders offline. To upgrade: `npm pack mathjax@<version>`, then
@@ -34,21 +83,28 @@ Shared assets:
 
 ## Writing LaTeX
 
-Type LaTeX straight into the HTML. A self-hosted copy of MathJax typesets it in
-the browser on every page — no CDN, no network dependency at page load.
+The same LaTeX works everywhere — in a Markdown post, and typed straight into
+any of the hand-written HTML pages. A self-hosted copy of MathJax typesets it in
+the browser — no CDN, no network dependency at page load.
 
 - Inline: `$e^{i\pi} + 1 = 0$` or `\(e^{i\pi} + 1 = 0\)`
 - Display: `$$ ... $$` or `\[ ... \]`
 - Environments: `\begin{align} ... \end{align}`, `pmatrix`, `cases`, and so on
 
-Wrap display math in `<div class="math-block">` so it scrolls sideways on a phone
-instead of overflowing the page.
+Markdown and LaTeX compete for the same punctuation — `_`, `*`, `\\` — so the
+build lifts every math span out of a post before the Markdown pass and puts it
+back untouched afterwards. Subscripts like `$x_1$` and matrices full of `\\`
+survive, and `<`, `>` and `&` inside math are escaped for you.
 
 Two things to know:
 
 - A bare `$` starts inline math. Write a literal dollar sign as `\$`.
-- Anything inside `<code>` or `<pre>` is **not** typeset, so you can show LaTeX
-  source. To show it, HTML-escape `<` as `&lt;`.
+- Anything in backticks or a fenced code block is left alone — no Markdown, no
+  math — so you can show LaTeX source verbatim.
+
+In a Markdown post, display math is wrapped in `<div class="math-block">` for
+you, so it scrolls sideways on a phone instead of overflowing the page. In the
+hand-written HTML pages, write that wrapper yourself.
 
 Shorthand macros are defined in the `macros` block of `assets/js/site.js`:
 `\RR \NN \ZZ \CC \QQ \EE` for blackboard letters, and `\diff{x} \abs{x}
@@ -57,9 +113,10 @@ they work on every page at once.
 
 ## Adding content
 
-**A blog post.** Copy `blog/_template.html` to `blog/YYYY-MM-DD-slug.html`, write
-the body, then add a matching `<article class="entry">` block at the top of the
-list in `blog.html`.
+**A blog post.** Copy `blog/posts/_template.md` to
+`blog/posts/YYYY-MM-DD-slug.md`, write it in Markdown, and run the build. The
+post list in `blog.html` is regenerated from the files themselves, so there is
+nothing to update by hand.
 
 **A class.** Add a `<div class="entry">` block to the right term section in
 `classes.html`, and a row to the summary table at the bottom.
@@ -90,8 +147,11 @@ one place and it propagates.
 ## Previewing locally
 
 ```sh
-python3 -m http.server 8000
+python3 tools/build.py --serve     # builds, serves, and rebuilds as you write
+python3 -m http.server 8000        # no rebuilding, just serves what's there
 ```
 
 Then open <http://localhost:8000>. (Open the files directly with `file://` and
 relative links still work, but the 404 page's absolute paths won't.)
+
+`tools/build.py` needs only Python 3.9+ — no packages, no network.
