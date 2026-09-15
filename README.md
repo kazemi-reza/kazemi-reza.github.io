@@ -1,23 +1,26 @@
-# rezakaze.github.io
+# kazemi-reza.github.io
 
-A static site with no Jekyll and nothing to install. Blog posts are written in
-Markdown and turned into plain HTML by a small script here in the repo; the rest
-of the pages are hand-written HTML. GitHub Pages only ever serves finished HTML,
-so there is no build on their side that can fail.
+A static site with no Jekyll and nothing to install. **Every page is written in
+Markdown** and turned into plain HTML by a small script here in the repo.
+GitHub Pages only ever serves finished HTML, so there is no build on their side
+that can fail.
+
+Edit a Markdown file — on github.com or locally — and the site rebuilds itself.
+You should never need to open a `.html` file.
 
 The `.nojekyll` file at the repo root is what tells GitHub Pages to skip Jekyll
 processing entirely. Don't delete it.
 
 ## Writing a blog post
 
-**On github.com** — add or edit a file in `blog/posts/` and commit it. That's
-the whole job. A GitHub Action (`.github/workflows/build-blog.yml`) rebuilds the
-post pages and the post list, commits the result, and asks Pages to redeploy.
-Give it a minute, then reload the site.
+**On github.com** — add or edit any Markdown file and commit it. That's the whole
+job. A GitHub Action (`.github/workflows/build-site.yml`) rebuilds the affected
+pages, commits the result, and asks Pages to redeploy. Give it a minute, then
+reload the site.
 
-If a post has a mistake in it — a bad date, a missing title — the Action fails
-instead of publishing, and the site stays exactly as it was. The Actions tab
-shows what was wrong.
+If a file has a mistake in it — a bad date, a missing title, a class with no
+term — the Action fails instead of publishing, and the site stays exactly as it
+was. The Actions tab shows which file and what was wrong.
 
 **Locally**, if you'd rather see it before pushing:
 
@@ -59,32 +62,34 @@ The build refuses to write anything if a post is malformed, and says which file
 and what's wrong. `python3 tools/test_build.py` checks the conversion itself —
 worth running if you ever change `tools/build.py`.
 
-## Pages
+## Where to edit what
 
-| File | Tab |
-| --- | --- |
-| `index.html` | About — bio and links to the other tabs |
-| `classes.html` | Classes taken, by term, with links to notes |
-| `research.html` | Research projects, each with a description |
-| `blog.html` | Blog post index |
-| `404.html` | Shown for any URL that doesn't exist |
+**Everything you edit is Markdown.** Everything else is generated.
 
-Longer content lives one directory down:
+| To change… | Edit | Which generates |
+| --- | --- | --- |
+| Your bio, role line, links | `content/pages/index.md` | `index.html` |
+| The Classes page heading and intro | `content/pages/classes.md` | `classes.html` |
+| The Research page heading and intro | `content/pages/research.md` | `research.html` |
+| A class you took | `content/classes/<course>.md` | an entry on `classes.html` |
+| A research project | `content/research/<project>.md` | an entry on `research.html` |
+| A set of course notes | `notes/<course>.md` | `notes/<course>.html` |
+| A blog post | `blog/posts/<date>-<slug>.md` | `blog/<date>-<slug>.html` |
+| Your name, email, GitHub link | `content/site.md` | the header and footer everywhere |
 
-- `blog/posts/` — **one Markdown file per post — this is where you write**, plus
-  `_template.md` to copy
-- `blog/*.html` — generated from those Markdown files; don't edit by hand
-- `notes/` — one HTML file per set of course notes, plus `_template.html`
+Each of those directories has a `_template.md` to copy. Generated `.html` files
+carry a comment at the top naming the Markdown file they came from.
+
+`404.html` is the one hand-written page left; it is chrome, not content.
 
 Shared assets:
 
 - `assets/css/style.css` — the whole stylesheet
 - `assets/js/site.js` — MathJax configuration, LaTeX macros, footer year
 - `assets/favicon.svg`
-- `tools/build.py` — turns `blog/posts/*.md` into post pages and rebuilds the
-  post list in `blog.html`
-- `.github/workflows/build-blog.yml` — runs that build on GitHub whenever a post
-  changes, so editing in the browser is enough to publish
+- `tools/build.py` — turns every Markdown source into its page
+- `.github/workflows/build-site.yml` — runs that build on GitHub whenever any
+  content changes, so editing in the browser is enough to publish
 - `tools/vendor/markdown2.py` — the Markdown converter, vendored (MIT, license
   included) so the build needs no `pip install`
 - `assets/vendor/mathjax/` — MathJax 3.2.2, self-hosted (Apache-2.0, license
@@ -95,9 +100,9 @@ Shared assets:
 
 ## Writing LaTeX
 
-The same LaTeX works everywhere — in a Markdown post, and typed straight into
-any of the hand-written HTML pages. A self-hosted copy of MathJax typesets it in
-the browser — no CDN, no network dependency at page load.
+The same LaTeX works in every Markdown file on the site — posts, notes, class
+descriptions, research write-ups, even your bio. A self-hosted copy of MathJax
+typesets it in the browser — no CDN, no network dependency at page load.
 
 - Inline: `$e^{i\pi} + 1 = 0$` or `\(e^{i\pi} + 1 = 0\)`
 - Display: `$$ ... $$` or `\[ ... \]`
@@ -114,9 +119,8 @@ Two things to know:
 - Anything in backticks or a fenced code block is left alone — no Markdown, no
   math — so you can show LaTeX source verbatim.
 
-In a Markdown post, display math is wrapped in `<div class="math-block">` for
-you, so it scrolls sideways on a phone instead of overflowing the page. In the
-hand-written HTML pages, write that wrapper yourself.
+Display math is wrapped in a scrollable block for you, so a wide equation
+scrolls sideways on a phone instead of overflowing the page.
 
 Shorthand macros are defined in the `macros` block of `assets/js/site.js`:
 `\RR \NN \ZZ \CC \QQ \EE` for blackboard letters, and `\diff{x} \abs{x}
@@ -126,20 +130,38 @@ they work on every page at once.
 ## Adding content
 
 **A blog post.** Copy `blog/posts/_template.md` to
-`blog/posts/YYYY-MM-DD-slug.md`, write it in Markdown, and run the build. The
-post list in `blog.html` is regenerated from the files themselves, so there is
-nothing to update by hand.
+`blog/posts/YYYY-MM-DD-slug.md` and write. The post list on `blog.html` is
+regenerated from the files themselves, so there is nothing to update by hand.
 
-**A class.** Add a `<div class="entry">` block to the right term section in
-`classes.html`, and a row to the summary table at the bottom.
+**A class.** Copy `content/classes/_template.md` to
+`content/classes/2026-fall-phys512.md` and fill in the front matter:
 
-**Course notes.** Copy `notes/_template.html` to `notes/course-name.html` and link
-to it from that class's `note-links` list.
+```yaml
+---
+title: Quantum Field Theory I
+course: PHYS 512
+term: Fall 2026          # groups the entry; terms sort newest first
+status: In progress      # "In progress"/"Ongoing" highlights the tag
+order: 1                 # position within the term
+meta:                    # each line becomes one item in the grey meta row
+  - "Instructor: [name]"
+  - 4 credits
+notes:                   # Markdown links to your notes pages
+  - "[Lecture notes](notes/phys-512-qft.html)"
+---
+```
 
-**A research project.** Add an `<article class="entry">` block to `research.html`.
+The body below the front matter is the description. Term headings, the ordering,
+the "— in progress" label and the summary table at the bottom of the page are
+all derived from these files — there is no second list to keep in sync.
 
-Placeholders to replace are marked `[like this]`, and each page has an
-`EDIT ME` comment at the top of its content section.
+**Course notes.** Copy `notes/_template.md` to `notes/phys-512-qft.md`, then link
+to `notes/phys-512-qft.html` from that class's `notes:` list.
+
+**A research project.** Copy `content/research/_template.md`. Same shape as a
+class, without `course` or `term`; `order` sets the position on the page.
+
+Placeholders to replace are marked `[like this]`.
 
 ## Colors
 

@@ -1,20 +1,21 @@
-# Rebuilds the blog pages whenever a post changes, so editing a Markdown file
-# on github.com is enough to publish it — no local build, nothing to remember.
+# Rebuilds the site whenever any content changes, so editing a Markdown file on
+# github.com is enough to publish it — no local build, nothing to remember.
 #
 # It commits the generated HTML back to the branch and then asks GitHub Pages
 # for a fresh deploy. If a post is malformed the run fails loudly and the site
 # is left exactly as it was.
 
-name: Build blog
+name: Build site
 
 on:
   push:
     branches: [main]
     paths:
+      - 'content/**'
       - 'blog/posts/**'
-      - 'blog.html'
+      - 'notes/**'
       - 'tools/**'
-      - '.github/workflows/build-blog.yml'
+      - '.github/workflows/build-site.yml'
   workflow_dispatch:
 
 permissions:
@@ -22,7 +23,7 @@ permissions:
   pages: write
 
 concurrency:
-  group: build-blog
+  group: build-site
   cancel-in-progress: false
 
 jobs:
@@ -38,23 +39,23 @@ jobs:
       - name: Check the Markdown converter
         run: python3 tools/test_build.py
 
-      - name: Build post pages
+      - name: Build the site
         run: python3 tools/build.py
 
       - name: Commit generated pages
         id: commit
         run: |
-          if [ -z "$(git status --porcelain blog blog.html)" ]; then
+          if [ -z "$(git status --porcelain blog blog.html notes index.html classes.html research.html)" ]; then
             echo "nothing to rebuild"
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add blog blog.html
-          git commit -m "Rebuild blog pages
+          git add blog blog.html notes index.html classes.html research.html
+          git commit -m "Rebuild generated pages
 
-          Generated from blog/posts/ by tools/build.py."
+          Generated from content/, blog/posts/ and notes/ by tools/build.py."
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
