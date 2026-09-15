@@ -10,15 +10,25 @@ processing entirely. Don't delete it.
 
 ## Writing a blog post
 
+**On github.com** — add or edit a file in `blog/posts/` and commit it. That's
+the whole job. A GitHub Action (`.github/workflows/build-blog.yml`) rebuilds the
+post pages and the post list, commits the result, and asks Pages to redeploy.
+Give it a minute, then reload the site.
+
+If a post has a mistake in it — a bad date, a missing title — the Action fails
+instead of publishing, and the site stays exactly as it was. The Actions tab
+shows what was wrong.
+
+**Locally**, if you'd rather see it before pushing:
+
 ```sh
 cp blog/posts/_template.md blog/posts/2026-09-20-my-post.md
 python3 tools/build.py --serve
 ```
 
-Write Markdown (with LaTeX in it) in that file. The page rebuilds every time you
-save, at <http://127.0.0.1:8000/blog.html>. When you're happy, stop the server,
-run `python3 tools/build.py` once, and commit both the `.md` and the generated
-`.html`.
+The page rebuilds every time you save, at <http://127.0.0.1:8000/blog.html>.
+Commit the `.md` and the generated `.html` together — or just commit the `.md`
+and let the Action produce the rest.
 
 Each post starts with a front matter block:
 
@@ -73,6 +83,8 @@ Shared assets:
 - `assets/favicon.svg`
 - `tools/build.py` — turns `blog/posts/*.md` into post pages and rebuilds the
   post list in `blog.html`
+- `.github/workflows/build-blog.yml` — runs that build on GitHub whenever a post
+  changes, so editing in the browser is enough to publish
 - `tools/vendor/markdown2.py` — the Markdown converter, vendored (MIT, license
   included) so the build needs no `pip install`
 - `assets/vendor/mathjax/` — MathJax 3.2.2, self-hosted (Apache-2.0, license

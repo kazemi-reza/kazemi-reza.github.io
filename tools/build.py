@@ -417,8 +417,12 @@ def build(quiet: bool = False) -> int:
     if update_index(posts):
         say("  wrote  blog.html (post list)")
 
-    say(f"{len(posts)} post{'s' if len(posts) != 1 else ''}, {written} rebuilt"
-        + (f", {len(drafts)} draft{'s' if len(drafts) != 1 else ''} skipped" if drafts else ""))
+    for draft in drafts:
+        say(f"  draft  blog/posts/{draft.path.name} — not published "
+            f"(remove 'draft: true' to publish it)")
+
+    say(f"{len(posts)} post{'s' if len(posts) != 1 else ''} published, {written} rebuilt"
+        + (f", {len(drafts)} held back as draft{'s' if len(drafts) != 1 else ''}" if drafts else ""))
     return len(posts)
 
 
