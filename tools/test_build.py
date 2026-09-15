@@ -6,11 +6,13 @@ LaTeX punctuation, a `---` inside a post truncating the body, an escaped dollar
 turning into live math in the browser.
 """
 
+import shutil
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from build import parse_front_matter, render_markdown  # noqa: E402
+from build import BuildError, Entry, parse_front_matter, render_markdown  # noqa: E402
 
 FAILURES = []
 
@@ -75,6 +77,53 @@ check("callout closes before what follows",
 html = render_markdown("| a | b |\n| --- | --- |\n| $x$ | 2 |\n")
 contains("tables work", html, "<table>")
 contains("math inside a table cell", html, "<td>$x$</td>")
+
+print("\nfront matter lists")
+meta, _ = parse_front_matter(
+    "---\ntitle: T\nmeta:\n  - Instructor: X\n  - 3 credits\nstatus: Ongoing\n---\n\nbody\n",
+    Path("sample.md"),
+)
+check("list collected", meta["meta"] == ["Instructor: X", "3 credits"], f"got {meta.get('meta')!r}")
+check("key after a list still parses", meta.get("status") == "Ongoing", f"got {meta.get('status')!r}")
+
+try:
+    parse_front_matter("---\ntitle: T\n  - orphan\n---\n\nbody\n", Path("bad.md"))
+    check("orphan list item rejected", False, "no error raised")
+except BuildError:
+    check("orphan list item rejected", True)
+
+print("\nentries")
+tmp = Path(tempfile.mkdtemp())
+(tmp / "a.md").write_text(
+    "---\ntitle: Real Analysis\ncourse: MATH 405\nterm: Fall 2026\nstatus: In progress\n"
+    "meta:\n  - 3 credits\nnotes:\n  - \"[Lecture notes](notes/x.html)\"\n---\n\n"
+    "Body with $L^p$ math.\n"
+)
+entry = Entry(tmp / "a.md", "class")
+html = entry.render()
+contains("heading joins course and title", html, "MATH 405 &middot; Real Analysis")
+contains("in-progress status is highlighted", html, '<span class="tag tag--active">')
+contains("extra meta rendered", html, "<span>3 credits</span>")
+contains("note link rendered", html, 'href="notes/x.html"')
+contains("body math preserved", html, "$L^p$")
+
+(tmp / "b.md").write_text(
+    "---\ntitle: Old\ncourse: X 1\nterm: Spring 2025\nstatus: Completed\n---\n\nBody.\n"
+)
+done = Entry(tmp / "b.md", "class")
+contains("completed status is a plain tag", done.render(), '<span class="tag">Completed</span>')
+check("terms sort newest first", entry.term_key > done.term_key,
+      f"{entry.term_key} should outrank {done.term_key}")
+check("term parsed into (year, season)", entry.term_key == (2026, 3), f"got {entry.term_key}")
+
+try:
+    (tmp / "c.md").write_text("---\ntitle: No term\n---\n\nBody.\n")
+    Entry(tmp / "c.md", "class")
+    check("a class without a term is rejected", False, "no error raised")
+except BuildError:
+    check("a class without a term is rejected", True)
+
+shutil.rmtree(tmp)
 
 print()
 if FAILURES:
